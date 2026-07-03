@@ -1,0 +1,74 @@
+---
+apiVersion: fluxcd.controlplane.io/v1
+kind: ResourceSet
+metadata:
+  name: static-sites
+  namespace: web
+spec:
+  inputs:
+    - name: portfolio
+      namespace: web
+      repository: ghcr.io/arnoldvann/portfolio
+      tag: latest # {"$imagepolicy": "web:portfolio:tag"}
+    - name: greetvandewynckele
+      namespace: web
+      repository: ghcr.io/arnoldvann/greetvandewynckele
+      tag: latest # {"$imagepolicy": "web:greetvandewynckele:tag"}
+  resources:
+    - apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: << inputs.name >>
+        namespace: << inputs.namespace >>
+        labels:
+          app: << inputs.name >>
+      spec:
+        replicas: 2
+        selector:
+          matchLabels:
+            app: << inputs.name >>
+        template:
+          metadata:
+            labels:
+              app: << inputs.name >>
+          spec:
+            containers:
+              - name: << inputs.name >>
+                image: << inputs.repository >>:<< inputs.tag >>
+                ports:
+                  - containerPort: 8080
+    - apiVersion: v1
+      kind: Service
+      metadata:
+        name: << inputs.name >>-svc
+        namespace: << inputs.namespace >>
+      spec:
+        type: ClusterIP
+        selector:
+          app: << inputs.name >>
+        ports:
+          - protocol: TCP
+            port: 80
+            targetPort: 8080
+    - apiVersion: image.toolkit.fluxcd.io/v1
+      kind: ImageRepository
+      metadata:
+        name: << inputs.name >>
+        namespace: << inputs.namespace >>
+      spec:
+        image: << inputs.repository >>
+        interval: 5m
+    - apiVersion: image.toolkit.fluxcd.io/v1
+      kind: ImagePolicy
+      metadata:
+        name: << inputs.name >>
+        namespace: << inputs.namespace >>
+      spec:
+        imageRepositoryRef:
+          name: << inputs.name >>
+        filterTags:
+          pattern: '^main-[0-9a-f]+-(?P<ts>[0-9]+)$'
+          extract: '$ts'
+        policy:
+          numerical:
+            order: asc

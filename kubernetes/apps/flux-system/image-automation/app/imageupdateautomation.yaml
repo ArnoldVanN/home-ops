@@ -1,0 +1,25 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageUpdateAutomation
+metadata:
+  name: home-ops
+  namespace: flux-system
+spec:
+  interval: 30m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: fluxcdbot@users.noreply.github.com
+        name: fluxcdbot
+      messageTemplate: "chore(images): {{range .Changed.Changes}}{{.OldValue}} -> {{.NewValue}} {{end}}"
+    push:
+      branch: main
+  update:
+    path: ./kubernetes/apps/web/static-sites/app
+    strategy: Setters
