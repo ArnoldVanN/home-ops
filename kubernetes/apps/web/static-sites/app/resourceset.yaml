@@ -9,11 +9,11 @@ spec:
     - name: portfolio
       namespace: web
       repository: ghcr.io/arnoldvann/portfolio
-      tag: latest # {"$imagepolicy": "web:portfolio:tag"}
+      tag: latest # {"$imagepolicy": "flux-system:portfolio:tag"}
     - name: greetvandewynckele
       namespace: web
       repository: ghcr.io/arnoldvann/greetvandewynckele
-      tag: latest # {"$imagepolicy": "web:greetvandewynckele:tag"}
+      tag: latest # {"$imagepolicy": "flux-system:greetvandewynckele:tag"}
   resources:
     - apiVersion: apps/v1
       kind: Deployment
@@ -54,7 +54,7 @@ spec:
       kind: ImageRepository
       metadata:
         name: << inputs.name >>
-        namespace: << inputs.namespace >>
+        namespace: flux-system
       spec:
         image: << inputs.repository >>
         interval: 5m
@@ -62,7 +62,7 @@ spec:
       kind: ImagePolicy
       metadata:
         name: << inputs.name >>
-        namespace: << inputs.namespace >>
+        namespace: flux-system
       spec:
         imageRepositoryRef:
           name: << inputs.name >>
