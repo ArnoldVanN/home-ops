@@ -8,7 +8,7 @@ spec:
     - name: portfolio
       namespace: web
       repository: ghcr.io/arnoldvann/portfolio
-      tag: main-feb0fa2-1790633538 # {"$imagepolicy": "flux-system:portfolio:tag"}
+      tag: main-15d4bfc-1790646336 # {"$imagepolicy": "flux-system:portfolio:tag"}
     - name: greetvandewynckele
       namespace: web
       repository: ghcr.io/arnoldvann/greetvandewynckele
