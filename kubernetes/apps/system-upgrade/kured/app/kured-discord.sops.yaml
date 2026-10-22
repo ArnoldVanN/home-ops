@@ -1,0 +1,22 @@
+apiVersion: v1
+data:
+  notifyUrl: ENC[AES256_GCM,data:z7KUcBE3GH5zYtBtGQ39YepYQlPZeWSY9kKWFGM5ER0rprttNYgzL2RmedJ4QHYengrxbSQrqBXyp6wle5iRtN93zWxsQTIZSZmbcs9jF3mroX+DEvWjBYeOP4138n/eJeCu5NzD9LSv9JpDjPhodmBLwSa8AXPFsHVJO1e2TBFJUBwy,iv:yGBMdR/2jhGz11bmB7vOWSv8rIsZcbMe7RUUuke/Kvc=,tag:DrdQA3n3aB2f06jbUu8lCA==,type:str]
+kind: Secret
+metadata:
+  name: kured-discord
+sops:
+  age:
+    - recipient: age1ldm2ctv52flevsqtyk67vdedhvdksqp0n0gh4heu4xt8u3prhv9sc8dpgw
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHbUdSdTFiaEd6Ym1TeS9n
+        SThha0J4aEJ2THNsVGFPWmNYR3Z0K1lwVEN3CnU2MkFxeTgva3J1dWNQVWJ3SmNK
+        YkwrcFVLZEVNVENKZkhxa0lnaEVnWGMKLS0tIExuRlBINFpZZlVKbzBsMFJ3QjZk
+        alNqdEcvUmZGMlBIZVZhV1VrUy9uQ1kKC40Um1vF1KnPcRJ7oSod1XL6jwVWgWzZ
+        dWyezVbujgAhFbLYNMRbckR4FMsLkjBCnenjy//mjFFegvTSXDcmVA==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2026-10-22T21:02:22Z"
+  mac: ENC[AES256_GCM,data:ubHwsekmI3RsjnhmZqIvVsPRdnnX8ouSfyT7x3YDZEvp7Cnv6IWYcLgDIda1RFZUSh55+VUwBXCrMtd2sqUu3IUbdLiB1Uy2d4zho6ZMRPEYfhqbHJXhlc9ZiOv6FUAqDIfiISKo/ux2xz28/8guAviLFV5Z5Cyz3L85TmFhLTw=,iv:MvfzYfGfnbALLIOEAtLxt5hw4p4+PHjWeyKtFLNGCuo=,tag:DGS5rPryhrHCnGF1uEH9UQ==,type:str]
+  encrypted_regex: ^(data|stringData)$
+  mac_only_encrypted: true
+  version: 3.11.0

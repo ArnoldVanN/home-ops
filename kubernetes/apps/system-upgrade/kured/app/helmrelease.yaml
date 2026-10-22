@@ -1,0 +1,24 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kured
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: kured
+  interval: 1h
+  values:
+    configuration:
+      period: 1h
+      # Runs after the k3s upgrade window (03:00-05:00) so the two never overlap
+      startTime: "05:00"
+      endTime: "07:00"
+      timeZone: Europe/Brussels
+      drainTimeout: 10m
+  valuesFrom:
+    # Shoutrrr URL (discord://token@id) for drain/reboot notifications
+    - kind: Secret
+      name: kured-discord
+      valuesKey: notifyUrl
+      targetPath: configuration.notifyUrl
