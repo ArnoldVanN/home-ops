@@ -57,7 +57,7 @@ spec:
         name: << inputs.name >>
         namespace: << inputs.namespace >>
         annotations:
-          external-dns.alpha.kubernetes.io/target: 3b83224e-a7be-4784-8b8d-bce9c10d1589.cfargotunnel.com
+          external-dns.kubernetes.io/target: 3b83224e-a7be-4784-8b8d-bce9c10d1589.cfargotunnel.com
       spec:
         ingressClassName: traefik
         rules:
