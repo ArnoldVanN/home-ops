@@ -5,3 +5,4 @@ namespace: network
 resources:
   - ./namespace.yaml
   - ./cloudflared/ks.yaml
+  - ./external-dns/ks.yaml

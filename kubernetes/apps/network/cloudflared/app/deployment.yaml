@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cloudflared
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 2
   selector:
@@ -24,17 +26,13 @@ spec:
             - cloudflared
             - tunnel
             - --no-autoupdate
+            - --config
+            - /etc/cloudflared/config.yaml
             - --loglevel
             - info
             - --metrics
             - 0.0.0.0:2000
             - run
-          env:
-            - name: TUNNEL_TOKEN
-              valueFrom:
-                secretKeyRef:
-                  name: tunnel-token
-                  key: token
           livenessProbe:
             httpGet:
               path: /ready
@@ -42,3 +40,18 @@ spec:
             failureThreshold: 1
             initialDelaySeconds: 10
             periodSeconds: 10
+          volumeMounts:
+            - name: config
+              mountPath: /etc/cloudflared/config.yaml
+              subPath: config.yaml
+              readOnly: true
+            - name: credentials
+              mountPath: /etc/cloudflared/credentials
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: cloudflared-config
+        - name: credentials
+          secret:
+            secretName: tunnel-credentials

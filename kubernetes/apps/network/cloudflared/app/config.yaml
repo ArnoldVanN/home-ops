@@ -1,0 +1,6 @@
+# Locally-managed tunnel: everything goes to Traefik, which routes by Ingress host.
+# DNS records for those hosts are created by external-dns.
+tunnel: 3b83224e-a7be-4784-8b8d-bce9c10d1589
+credentials-file: /etc/cloudflared/credentials/credentials.json
+ingress:
+  - service: http://traefik.kube-system.svc.cluster.local
