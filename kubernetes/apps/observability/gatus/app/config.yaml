@@ -1,0 +1,74 @@
+storage:
+  type: sqlite
+  path: /data/data.db
+
+ui:
+  title: Status | home-ops
+  header: home-ops
+  dashboard-heading: Status
+  dashboard-subheading: Uptime of the sites hosted on home-ops
+  default-sort-by: group
+
+# Covers the k3s upgrade (03:00-05:00) and kured reboot (05:00-07:00) windows.
+maintenance:
+  start: "03:00"
+  duration: 4h
+  timezone: Europe/Brussels
+
+alerting:
+  discord:
+    webhook-url: "${DISCORD_WEBHOOK_URL}"
+    default-alert:
+      failure-threshold: 3
+      success-threshold: 2
+      send-on-resolved: true
+
+endpoints:
+  - name: arnovannieuwenhuyzen.com
+    group: sites
+    url: https://arnovannieuwenhuyzen.com
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+    alerts:
+      - type: discord
+
+  - name: greetvandewynckele.com
+    group: sites
+    url: https://greetvandewynckele.com
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+    alerts:
+      - type: discord
+
+  # In-cluster checks, to tell an app outage apart from a tunnel outage.
+  - name: portfolio
+    group: cluster
+    url: http://portfolio-svc.web.svc.cluster.local
+    interval: 1m
+    ui: &internal-ui
+      hide-hostname: true
+      hide-url: true
+      hide-port: true
+      hide-errors: true
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: greetvandewynckele
+    group: cluster
+    url: http://greetvandewynckele-svc.web.svc.cluster.local
+    interval: 1m
+    ui: *internal-ui
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: flux
+    group: cluster
+    url: http://flux-operator.flux-system.svc.cluster.local:9080
+    interval: 5m
+    ui: *internal-ui
+    conditions:
+      - "[STATUS] == 200"

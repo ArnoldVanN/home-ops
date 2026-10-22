@@ -1,0 +1,74 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: flux
+spec:
+  providerRef:
+    name: discord
+  eventSeverity: error
+  # Wildcard namespaces aren't supported, so every namespace with Flux objects is listed
+  eventSources:
+    - kind: GitRepository
+      name: "*"
+      namespace: flux-system
+    - kind: OCIRepository
+      name: "*"
+      namespace: flux-system
+    - kind: OCIRepository
+      name: "*"
+      namespace: kube-system
+    - kind: OCIRepository
+      name: "*"
+      namespace: system-upgrade
+    - kind: ImageRepository
+      name: "*"
+      namespace: flux-system
+    - kind: ImagePolicy
+      name: "*"
+      namespace: flux-system
+    - kind: ImageUpdateAutomation
+      name: "*"
+      namespace: flux-system
+    - kind: HelmRelease
+      name: "*"
+      namespace: flux-system
+    - kind: HelmRelease
+      name: "*"
+      namespace: kube-system
+    - kind: HelmRelease
+      name: "*"
+      namespace: network
+    - kind: HelmRepository
+      name: "*"
+      namespace: network
+    - kind: HelmRelease
+      name: "*"
+      namespace: system-upgrade
+    - kind: HelmRelease
+      name: "*"
+      namespace: tailscale
+    - kind: HelmRepository
+      name: "*"
+      namespace: tailscale
+    - kind: Kustomization
+      name: "*"
+      namespace: flux-system
+    - kind: Kustomization
+      name: "*"
+      namespace: kube-system
+    - kind: Kustomization
+      name: "*"
+      namespace: network
+    - kind: Kustomization
+      name: "*"
+      namespace: observability
+    - kind: Kustomization
+      name: "*"
+      namespace: system-upgrade
+    - kind: Kustomization
+      name: "*"
+      namespace: tailscale
+    - kind: Kustomization
+      name: "*"
+      namespace: web

@@ -1,0 +1,7 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kube-system
+# kube-system is created by k3s, so it isn't managed here
+resources:
+  - ./reloader/ks.yaml
