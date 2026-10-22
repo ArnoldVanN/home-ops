@@ -29,6 +29,7 @@ spec:
     domainFilters:
       - arnovannieuwenhuyzen.com
       - greetvandewynckele.com
+      - aquilahosting.com
     policy: sync
     txtOwnerId: home-ops
     txtPrefix: "k8s."

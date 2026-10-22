@@ -1,0 +1,87 @@
+storage:
+  type: sqlite
+  path: /data/data.db
+
+ui:
+  title: Status | Aquila Hosting
+  header: Aquila Hosting
+  link: https://aquilahosting.com
+  dashboard-heading: Status
+  dashboard-subheading: Current status of Aquila Hosting services
+  default-sort-by: group
+  # Colours from aquilahosting.com's theme
+  # custom.css loads before Gatus' own CSS, hence the extra specificity
+  custom-css: |
+    html:root {
+      --background: 210 24% 98%;
+      --foreground: 215 25% 21%;
+      --card: 0 0% 100%;
+      --card-foreground: 215 25% 21%;
+      --popover: 0 0% 100%;
+      --popover-foreground: 215 25% 21%;
+      --primary: 221 70% 47%;
+      --primary-foreground: 210 40% 98%;
+      --secondary: 210 22% 94%;
+      --secondary-foreground: 215 28% 17%;
+      --muted: 210 22% 94%;
+      --muted-foreground: 215 16% 42%;
+      --accent: 210 24% 92%;
+      --accent-foreground: 215 28% 17%;
+      --destructive: 0 60% 45%;
+      --border: 214 20% 88%;
+      --input: 214 20% 88%;
+      --ring: 221 70% 47%;
+      --radius: 0.75rem;
+    }
+    html:root.dark {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+      --popover: 222.2 84% 4.9%;
+      --popover-foreground: 210 40% 98%;
+      --primary: 224 71% 43%;
+      --primary-foreground: 210 40% 98%;
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 45% 44%;
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 224.3 76.3% 48%;
+    }
+
+alerting:
+  discord:
+    title: ":rotating_light: Aquila status"
+    webhook-url: "${DISCORD_WEBHOOK_URL}"
+    default-alert:
+      failure-threshold: 3
+      success-threshold: 2
+      send-on-resolved: true
+
+endpoints:
+  - name: Website
+    group: aquilahosting.com
+    url: https://aquilahosting.com
+    interval: 2m
+    conditions:
+      - "[STATUS] == 200"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+    alerts:
+      - type: discord
+
+  # The API answers "ok" on every path, so this only proves it's reachable
+  - name: API
+    group: aquilahosting.com
+    url: https://api.aquilahosting.com/health
+    interval: 2m
+    conditions:
+      - "[STATUS] == 200"
+      - "[BODY] == ok"
+      - "[CERTIFICATE_EXPIRATION] > 168h"
+    alerts:
+      - type: discord

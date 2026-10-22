@@ -1,0 +1,33 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended"],
+  timezone: "Europe/Brussels",
+  // Flux and Kubernetes managers have no default file patterns for this layout
+  flux: {
+    managerFilePatterns: ["/^kubernetes/.+\\.ya?ml$/"],
+  },
+  kubernetes: {
+    managerFilePatterns: ["/^kubernetes/.+\\.ya?ml$/"],
+  },
+  customManagers: [
+    {
+      // Release assets pulled in as remote kustomize resources, e.g. system-upgrade-controller
+      customType: "regex",
+      description: "GitHub release download URLs in kustomizations",
+      managerFilePatterns: ["/^kubernetes/.+/kustomization\\.ya?ml$/"],
+      matchStrings: [
+        "https://github\\.com/(?<depName>[^/]+/[^/]+)/releases/download/(?<currentValue>[^/]+)/",
+      ],
+      datasourceTemplate: "github-releases",
+    },
+  ],
+  packageRules: [
+    {
+      description: "Automerge patch updates; Flux alerts and Gatus report breakage in Discord",
+      matchUpdateTypes: ["patch", "digest"],
+      automerge: true,
+      // There's no CI, so don't wait for status checks
+      ignoreTests: true,
+    },
+  ],
+}
