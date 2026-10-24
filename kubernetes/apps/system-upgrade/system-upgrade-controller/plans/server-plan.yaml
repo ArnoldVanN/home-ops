@@ -16,7 +16,7 @@ spec:
   upgrade:
     image: rancher/k3s-upgrade
   # (v1.34 -> v1.35 -> v1.36) before switching to the stable channel.
-  channel: https://update.k3s.io/v1-release/channels/v1.34
+  channel: https://update.k3s.io/v1-release/channels/v1.35
   window:
     days:
       - monday
