@@ -1,0 +1,46 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authentik
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: authentik
+  interval: 1h
+  values:
+    blueprints:
+      secrets:
+        - authentik-blueprint-seer
+    authentik:
+      postgresql:
+        host: authentik-db-rw
+        name: authentik
+        user: authentik
+      error_reporting:
+        enabled: false
+    global:
+      # Secrets come from env so they stay out of the chart's generated secret.
+      env:
+        - name: AUTHENTIK_SECRET_KEY
+          valueFrom:
+            secretKeyRef: { name: authentik-secret, key: secret-key }
+        - name: AUTHENTIK_POSTGRESQL__PASSWORD
+          valueFrom:
+            secretKeyRef: { name: authentik-db-app, key: password }
+        # Creates the akadmin user on first start; ignored afterwards.
+        - name: AUTHENTIK_BOOTSTRAP_EMAIL
+          valueFrom:
+            secretKeyRef: { name: authentik-secret, key: bootstrap-email }
+        - name: AUTHENTIK_BOOTSTRAP_PASSWORD
+          valueFrom:
+            secretKeyRef: { name: authentik-secret, key: bootstrap-password }
+    server:
+      ingress:
+        enabled: true
+        ingressClassName: traefik
+        annotations:
+          external-dns.kubernetes.io/target: 3b83224e-a7be-4784-8b8d-bce9c10d1589.cfargotunnel.com
+          traefik.ingress.kubernetes.io/router.middlewares: security-authentik-https@kubernetescrd
+        hosts:
+          - auth.arnovannieuwenhuyzen.com

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: seer-oidc
+stringData:
+  client-secret: ENC[AES256_GCM,data:bEzqNKvXNZojh8gxQqsyDSLQpxESNMW2e1ofmpxqK1t21XdndG8XtT9/EO56t9i5VCgLEuy/AXQaZhB17tvkWA==,iv:b9iOqtZz1UW83N0PAUVi8dAsw0PiZRTnJU9SyuUQDTc=,tag:Z+EF1OZAb+QzPqD1TikxSQ==,type:str]
+sops:
+  age:
+    - recipient: age1ldm2ctv52flevsqtyk67vdedhvdksqp0n0gh4heu4xt8u3prhv9sc8dpgw
+      enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHaEY1bzhGR3hUUngwaEZP
+        dWs1Q1ZTQWJyclVOV0wrSDBuNU5ZdVpYeEVBClA0azkxNzhiMmErVUtKUVFPWGMx
+        Ykg3VXduRy93N0dkZWFIK09BbmVYSTgKLS0tIFlzTlJBTzlwQVNlMnFQVHhaV21v
+        TlJqRVowK2Niamgva0J0M3gvWXgyREUKSas+70Fa/HuOFjhstSOxOJtypeH+cLnG
+        GHpDgwvXNHby2JaEF0r0pYXG7B0+hR3vocWL+SsRJe6JQwh3dZ7Dug==
+        -----END AGE ENCRYPTED FILE-----
+  lastmodified: "2026-10-29T01:01:09Z"
+  mac: ENC[AES256_GCM,data:Gp13D0ReZiVuxtNmkqEFO1QOz5v5pl1jW+OvSsr40OoFBB1oiaeZJu2uWbMnJrfpSIE3sfl9d5ySKj9RI2lfppJwGwNFPdYFVcUUYpbO5X3guDru2aIbuMM7gmGr9iG9MUlNDhfQIKN5OBkjRgUs/XFi1CqvsjthIfDT+n2wt9k=,iv:cjqLTMI28TaQL2T1HGnWCfaQED9bIeLDVw/gSLfwAaM=,tag:18iXERuOFbZdgwlD3sN33g==,type:str]
+  encrypted_regex: ^(data|stringData)$
+  mac_only_encrypted: true
+  version: 3.11.0

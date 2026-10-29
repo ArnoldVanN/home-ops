@@ -5,3 +5,4 @@ namespace: observability
 resources:
   - ./namespace.yaml
   - ./gatus/ks.yaml
+  - ./seer/ks.yaml

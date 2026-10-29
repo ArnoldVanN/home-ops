@@ -15,6 +15,11 @@ spec:
       repository: ghcr.io/arnoldvann/greetvandewynckele
       host: greetvandewynckele.com
       tag: main-f7039b5-1783095703 # {"$imagepolicy": "flux-system:greetvandewynckele:tag"}
+    - name: seer-docs
+      namespace: web
+      repository: ghcr.io/arnoldvann/seer-docs
+      host: seer.arnovannieuwenhuyzen.com
+      tag: latest # {"$imagepolicy": "flux-system:seer-docs:tag"}
   resources:
     - apiVersion: apps/v1
       kind: Deployment

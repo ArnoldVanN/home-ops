@@ -1,0 +1,12 @@
+---
+# Traefik doesn't trust X-Forwarded-Proto from cloudflared, so authentik would
+# see plain http and put http:// URLs in its OIDC discovery document. The
+# tunnel only serves HTTPS, so pin it.
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: authentik-https
+spec:
+  headers:
+    customRequestHeaders:
+      X-Forwarded-Proto: https

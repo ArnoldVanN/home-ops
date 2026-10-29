@@ -1,0 +1,160 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: seer
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: seer
+  interval: 1h
+  values:
+    mode: combined
+    combined:
+      replicas: 1
+    web:
+      replicas: 1
+    podDisruptionBudget:
+      enabled: false
+    database:
+      existingSecret: seer-db-app
+      existingSecretKey: uri
+    httpRoute:
+      directRpc: false
+    auth:
+      oidc:
+        issuer: https://auth.arnovannieuwenhuyzen.com/application/o/seer/
+        clientId: seer
+        existingSecret: seer-oidc
+        allowedGroups: [authentik Admins]
+        name: authentik
+    config:
+      sites:
+        - key: home-ops
+          hosts: [status-next.arnovannieuwenhuyzen.com]
+          ui:
+            title: home-ops
+            description: Uptime of the sites hosted on home-ops
+            homeUrl: https://arnovannieuwenhuyzen.com
+            customCss: |
+              :root {
+                --seer-bg: hsl(0 0% 100%);
+                --seer-surface: hsl(0 0% 100%);
+                --seer-subtle: hsl(0 0% 96.1%);
+                --seer-border: hsl(0 0% 89.8%);
+                --seer-text: hsl(0 0% 3.9%);
+                --seer-muted: hsl(0 0% 45.2%);
+                --seer-accent: hsl(276 100% 42.9%);
+                --seer-accent-foreground: hsl(270 99% 98%);
+                --seer-radius: 0;
+              }
+              @media (prefers-color-scheme: dark) {
+                :root {
+                  --seer-bg: hsl(0 0% 3.9%);
+                  --seer-surface: hsl(0 0% 9.1%);
+                  --seer-subtle: hsl(0 0% 14.9%);
+                  --seer-border: hsl(0 0% 13.5%);
+                  --seer-text: hsl(0 0% 98%);
+                  --seer-muted: hsl(0 0% 63%);
+                  --seer-accent: hsl(275 82% 37.9%);
+                  --seer-accent-foreground: hsl(270 99% 98%);
+                }
+              }
+          endpoints:
+            - key: arnovannieuwenhuyzen-com
+              name: arnovannieuwenhuyzen.com
+              group: sites
+              url: https://arnovannieuwenhuyzen.com
+              interval: 5m
+              failureThreshold: 3
+              successThreshold: 2
+              conditions:
+                - "[STATUS] == 200"
+                - "[CERTIFICATE_EXPIRATION] > 168h"
+            - key: greetvandewynckele-com
+              name: greetvandewynckele.com
+              group: sites
+              url: https://greetvandewynckele.com
+              interval: 5m
+              failureThreshold: 3
+              successThreshold: 2
+              conditions:
+                - "[STATUS] == 200"
+                - "[CERTIFICATE_EXPIRATION] > 168h"
+            - key: portfolio
+              group: cluster
+              url: http://portfolio-svc.web.svc.cluster.local
+              interval: 1m
+              conditions: ["[STATUS] == 200"]
+            - key: greetvandewynckele
+              group: cluster
+              url: http://greetvandewynckele-svc.web.svc.cluster.local
+              interval: 1m
+              conditions: ["[STATUS] == 200"]
+            - key: seer-docs
+              group: cluster
+              url: http://seer-docs-svc.web.svc.cluster.local
+              interval: 1m
+              conditions: ["[STATUS] == 200"]
+            - key: flux
+              group: cluster
+              url: http://flux-operator.flux-system.svc.cluster.local:9080
+              interval: 5m
+              conditions: ["[STATUS] == 200"]
+          dashboards:
+            - { key: home-ops, title: Status, visibility: public, groups: [sites] }
+            - { key: cluster, title: Cluster, visibility: private, groups: [sites, cluster] }
+        - key: aquila
+          hosts: [status-next.aquilahosting.com]
+          ui:
+            title: Aquila Hosting
+            description: Current status of Aquila Hosting services
+            homeUrl: https://aquilahosting.com
+            customCss: |
+              :root {
+                --seer-bg: hsl(210 24% 98%);
+                --seer-surface: hsl(0 0% 100%);
+                --seer-subtle: hsl(210 22% 94%);
+                --seer-border: hsl(214 20% 88%);
+                --seer-text: hsl(215 25% 21%);
+                --seer-muted: hsl(215 16% 42%);
+                --seer-accent: hsl(221 70% 47%);
+                --seer-accent-foreground: hsl(210 40% 98%);
+                --seer-radius: 0.75rem;
+              }
+              @media (prefers-color-scheme: dark) {
+                :root {
+                  --seer-bg: hsl(222.2 84% 4.9%);
+                  --seer-surface: hsl(222.2 84% 4.9%);
+                  --seer-subtle: hsl(217.2 32.6% 17.5%);
+                  --seer-border: hsl(217.2 32.6% 17.5%);
+                  --seer-text: hsl(210 40% 98%);
+                  --seer-muted: hsl(215 20.2% 65.1%);
+                  --seer-accent: hsl(224 71% 43%);
+                  --seer-accent-foreground: hsl(210 40% 98%);
+                }
+              }
+          endpoints:
+            - key: aquila-website
+              name: Website
+              group: aquilahosting.com
+              url: https://aquilahosting.com
+              interval: 2m
+              failureThreshold: 3
+              successThreshold: 2
+              conditions:
+                - "[STATUS] == 200"
+                - "[CERTIFICATE_EXPIRATION] > 168h"
+            - key: aquila-api
+              name: API
+              group: aquilahosting.com
+              url: https://api.aquilahosting.com/health
+              interval: 2m
+              failureThreshold: 3
+              successThreshold: 2
+              conditions:
+                - "[STATUS] == 200"
+                - "[BODY] == ok"
+                - "[CERTIFICATE_EXPIRATION] > 168h"
+          dashboards:
+            - { key: aquila, title: Status, visibility: public, groups: [aquilahosting.com] }

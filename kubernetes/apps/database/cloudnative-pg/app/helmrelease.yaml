@@ -1,0 +1,19 @@
+---
+# Postgres operator. Apps declare their own `Cluster` next to themselves
+# (see security/authentik/app/database.yaml).
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudnative-pg
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: cloudnative-pg
+  interval: 1h
+  install:
+    crds: CreateReplace
+  upgrade:
+    crds: CreateReplace
+  values:
+    crds:
+      create: true

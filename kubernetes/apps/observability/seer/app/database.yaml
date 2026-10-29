@@ -1,0 +1,15 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: seer-db
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.6-standard-trixie
+  bootstrap:
+    initdb:
+      database: seer
+      owner: seer
+  storage:
+    storageClass: local-path
+    size: 5Gi
