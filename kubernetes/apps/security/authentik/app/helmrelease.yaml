@@ -41,6 +41,5 @@ spec:
         ingressClassName: traefik
         annotations:
           external-dns.kubernetes.io/target: 3b83224e-a7be-4784-8b8d-bce9c10d1589.cfargotunnel.com
-          traefik.ingress.kubernetes.io/router.middlewares: security-authentik-https@kubernetescrd
         hosts:
           - auth.arnovannieuwenhuyzen.com

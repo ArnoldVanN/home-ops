@@ -5,3 +5,4 @@ namespace: kube-system
 # kube-system is created by k3s, so it isn't managed here
 resources:
   - ./reloader/ks.yaml
+  - ./traefik/ks.yaml

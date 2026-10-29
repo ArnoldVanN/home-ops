@@ -5,6 +5,5 @@ resources:
   - ./authentik-secret.sops.yaml
   - ./blueprint-seer.sops.yaml
   - ./database.yaml
-  - ./middleware.yaml
   - ./ocirepository.yaml
   - ./helmrelease.yaml

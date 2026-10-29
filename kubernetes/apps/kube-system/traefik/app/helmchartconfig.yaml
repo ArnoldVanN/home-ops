@@ -1,0 +1,21 @@
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+spec:
+  valuesContent: |-
+    ports:
+      tunnel:
+        port: 8001
+        exposedPort: 80
+        protocol: TCP
+        expose:
+          default: false
+          tunnel: true
+        forwardedHeaders:
+          trustedIPs: [10.42.0.0/16]
+    service:
+      additionalServices:
+        tunnel:
+          type: ClusterIP
