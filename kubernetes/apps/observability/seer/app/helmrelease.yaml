@@ -21,6 +21,13 @@ spec:
       existingSecretKey: uri
     httpRoute:
       directRpc: false
+    server:
+      extraEnv:
+        - name: DISCORD_WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: discord-webhook
+              key: address
     auth:
       oidc:
         issuer: https://auth.arnovannieuwenhuyzen.com/application/o/seer/
@@ -29,9 +36,12 @@ spec:
         allowedGroups: [authentik Admins]
         name: authentik
     config:
+      alerting:
+        discord:
+          webhookUrl: ${DISCORD_WEBHOOK_URL}
       sites:
         - key: home-ops
-          hosts: [status-next.arnovannieuwenhuyzen.com]
+          hosts: [status.arnovannieuwenhuyzen.com]
           ui:
             title: home-ops
             description: Uptime of the sites hosted on home-ops
@@ -71,6 +81,8 @@ spec:
               conditions:
                 - "[STATUS] == 200"
                 - "[CERTIFICATE_EXPIRATION] > 168h"
+              alerts:
+                - type: discord
             - key: greetvandewynckele-com
               name: greetvandewynckele.com
               group: sites
@@ -81,6 +93,8 @@ spec:
               conditions:
                 - "[STATUS] == 200"
                 - "[CERTIFICATE_EXPIRATION] > 168h"
+              alerts:
+                - type: discord
             - key: portfolio
               group: cluster
               url: http://portfolio-svc.web.svc.cluster.local
@@ -105,7 +119,7 @@ spec:
             - { key: home-ops, title: Status, visibility: public, groups: [sites] }
             - { key: cluster, title: Cluster, visibility: private, groups: [sites, cluster] }
         - key: aquila
-          hosts: [status-next.aquilahosting.com]
+          hosts: [status.aquilahosting.com]
           ui:
             title: Aquila Hosting
             description: Current status of Aquila Hosting services
@@ -145,6 +159,8 @@ spec:
               conditions:
                 - "[STATUS] == 200"
                 - "[CERTIFICATE_EXPIRATION] > 168h"
+              alerts:
+                - type: discord
             - key: aquila-api
               name: API
               group: aquilahosting.com
@@ -156,5 +172,7 @@ spec:
                 - "[STATUS] == 200"
                 - "[BODY] == ok"
                 - "[CERTIFICATE_EXPIRATION] > 168h"
+              alerts:
+                - type: discord
           dashboards:
             - { key: aquila, title: Status, visibility: public, groups: [aquilahosting.com] }
