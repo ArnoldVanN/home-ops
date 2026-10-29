@@ -9,7 +9,7 @@ spec:
       namespace: web
       repository: ghcr.io/arnoldvann/portfolio
       host: arnovannieuwenhuyzen.com
-      tag: main-89de5a2-1792706166 # {"$imagepolicy": "flux-system:portfolio:tag"}
+      tag: main-f822b79-1793294950 # {"$imagepolicy": "flux-system:portfolio:tag"}
     - name: greetvandewynckele
       namespace: web
       repository: ghcr.io/arnoldvann/greetvandewynckele
