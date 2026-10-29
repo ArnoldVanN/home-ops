@@ -19,7 +19,7 @@ spec:
       namespace: web
       repository: ghcr.io/arnoldvann/seer-docs
       host: seer.arnovannieuwenhuyzen.com
-      tag: main-0b51007-1793292960 # {"$imagepolicy": "flux-system:seer-docs:tag"}
+      tag: main-2fdac7a-1793305965 # {"$imagepolicy": "flux-system:seer-docs:tag"}
   resources:
     - apiVersion: apps/v1
       kind: Deployment
