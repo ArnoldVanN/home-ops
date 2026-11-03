@@ -95,6 +95,18 @@ spec:
                 - "[CERTIFICATE_EXPIRATION] > 168h"
               alerts:
                 - type: discord
+            - key: seer-arnovannieuwenhuyzen-com
+              name: seer.arnovannieuwenhuyzen.com
+              group: sites
+              url: https://seer.arnovannieuwenhuyzen.com/docs
+              interval: 5m
+              failureThreshold: 3
+              successThreshold: 2
+              conditions:
+                - "[STATUS] == 200"
+                - "[CERTIFICATE_EXPIRATION] > 168h"
+              alerts:
+                - type: discord
             - key: portfolio
               group: cluster
               url: http://portfolio-svc.web.svc.cluster.local
@@ -116,7 +128,7 @@ spec:
               interval: 5m
               conditions: ["[STATUS] == 200"]
           dashboards:
-            - { key: home-ops, title: Status, visibility: public, groups: [sites] }
+            - { key: home-ops, title: Status, visibility: public, groups: [sites], defaultRange: 7d }
             - { key: cluster, title: Cluster, visibility: private, groups: [sites, cluster] }
         - key: aquila
           hosts: [status.aquilahosting.com]
@@ -175,4 +187,4 @@ spec:
               alerts:
                 - type: discord
           dashboards:
-            - { key: aquila, title: Status, visibility: public, groups: [aquilahosting.com] }
+            - { key: aquila, title: Status, visibility: public, groups: [aquilahosting.com], defaultRange: 7d }
