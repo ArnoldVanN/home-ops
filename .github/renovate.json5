@@ -20,8 +20,22 @@
       ],
       datasourceTemplate: "github-releases",
     },
+    {
+      customType: "regex",
+      description: "# renovate: annotations above a version or tag field",
+      managerFilePatterns: ["/^kubernetes/.+\\.ya?ml$/"],
+      matchStrings: [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*(?:version|tag): \"?(?<currentValue>[^\"\\s]+)\"?",
+      ],
+    },
   ],
   packageRules: [
+    {
+      description: "k3s: one minor at a time, minors need a manual merge",
+      matchDepNames: ["k3s-io/k3s"],
+      versioning: "regex:^v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\+k3s(?<build>\\d+)$",
+      separateMultipleMinor: true,
+    },
     {
       description: "Automerge patch updates; Flux alerts and Gatus report breakage in Discord",
       matchUpdateTypes: ["patch", "digest"],
