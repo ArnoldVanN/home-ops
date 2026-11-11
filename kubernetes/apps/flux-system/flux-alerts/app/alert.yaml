@@ -1,5 +1,5 @@
 ---
-apiVersion: notification.toolkit.fluxcd.io/v1beta3
+apiVersion: notification.toolkit.fluxcd.io/v1
 kind: Alert
 metadata:
   name: flux
@@ -7,6 +7,17 @@ spec:
   providerRef:
     name: discord
   eventSeverity: error
+  # Drop transient network blips (GitHub timeouts, source-controller restarting
+  # during Flux upgrades). Flux retries these on the next interval and they
+  # resolve on their own. kustomize reports a failed remote resource fetch as
+  # "URL is a git repository" after it falls back to cloning the URL as git.
+  exclusionList:
+    - "i/o timeout"
+    - "context deadline exceeded"
+    - "TLS handshake timeout"
+    - "connection refused"
+    - "connection reset by peer"
+    - "URL is a git repository"
   # Wildcard namespaces aren't supported, so every namespace with Flux objects is listed
   eventSources:
     - kind: GitRepository
@@ -21,6 +32,15 @@ spec:
     - kind: OCIRepository
       name: "*"
       namespace: system-upgrade
+    - kind: OCIRepository
+      name: "*"
+      namespace: database
+    - kind: OCIRepository
+      name: "*"
+      namespace: observability
+    - kind: OCIRepository
+      name: "*"
+      namespace: security
     - kind: ImageRepository
       name: "*"
       namespace: flux-system
@@ -48,6 +68,15 @@ spec:
     - kind: HelmRelease
       name: "*"
       namespace: tailscale
+    - kind: HelmRelease
+      name: "*"
+      namespace: database
+    - kind: HelmRelease
+      name: "*"
+      namespace: observability
+    - kind: HelmRelease
+      name: "*"
+      namespace: security
     - kind: HelmRepository
       name: "*"
       namespace: tailscale
@@ -72,3 +101,9 @@ spec:
     - kind: Kustomization
       name: "*"
       namespace: web
+    - kind: Kustomization
+      name: "*"
+      namespace: database
+    - kind: Kustomization
+      name: "*"
+      namespace: security
